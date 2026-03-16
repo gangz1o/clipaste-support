@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clipaste – Legal</title>
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent:    #3b82f6;
+      --accent-dk: #2563eb;
+      --bg:        #f8fafc;
+      --surface:   #ffffff;
+      --border:    #e2e8f0;
+      --text:      #1e293b;
+      --muted:     #64748b;
+      --radius:    12px;
+      --shadow:    0 1px 3px 0 rgb(0 0 0 / .08), 0 1px 2px -1px rgb(0 0 0 / .08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
+                   Roboto, "Helvetica Neue", Arial, "Noto Sans CJK SC",
+                   "Noto Sans JP", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+
+    /* ── Header ──────────────────────────────────────────────── */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+
+    .header-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    /* ── Language switcher ───────────────────────────────────── */
+    .lang-switcher {
+      display: flex;
+      gap: 4px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 3px;
+    }
+
+    .lang-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+      transition: background .15s, color .15s;
+      line-height: 1.4;
+    }
+
+    .lang-btn:hover { background: var(--border); color: var(--text); }
+
+    .lang-btn.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* ── Page nav ────────────────────────────────────────────── */
+    .page-nav {
+      max-width: 860px;
+      margin: 1.5rem auto 0;
+      padding: 0 1.5rem;
+      display: flex;
+      gap: 4px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .page-tab {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0.6rem 1.1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--muted);
+      position: relative;
+      bottom: -2px;
+      border-bottom: 2px solid transparent;
+      transition: color .15s, border-color .15s;
+    }
+
+    .page-tab:hover { color: var(--text); }
+
+    .page-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* ── Main content ────────────────────────────────────────── */
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    .doc-header {
+      margin-bottom: 2rem;
+    }
+
+    .doc-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text);
+      line-height: 1.25;
+    }
+
+    .doc-updated {
+      margin-top: 0.4rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .doc-intro {
+      margin-top: 1rem;
+      padding: 1.25rem 1.5rem;
+      background: #eff6ff;
+      border-left: 4px solid var(--accent);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      font-size: 0.95rem;
+      color: #1e40af;
+      line-height: 1.7;
+    }
+
+    /* ── Sections ────────────────────────────────────────────── */
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .section-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .section-body {
+      font-size: 0.93rem;
+      color: #334155;
+      line-height: 1.8;
+    }
+
+    .section-body p { margin-bottom: 0.7rem; }
+    .section-body p:last-child { margin-bottom: 0; }
+
+    .section-body ul {
+      padding-left: 1.25rem;
+      margin: 0.5rem 0 0.7rem;
+    }
+
+    .section-body li { margin-bottom: 0.5rem; }
+
+    .section-body strong { color: var(--text); font-weight: 600; }
+
+    .highlight-block {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 0.9rem 1.1rem;
+      margin-top: 0.75rem;
+      font-size: 0.88rem;
+      color: #166534;
+    }
+
+    /* ── Contact card ────────────────────────────────────────── */
+    .contact-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      font-size: 0.88rem;
+      color: var(--accent-dk);
+      text-decoration: none;
+      transition: background .15s;
+      margin-top: 0.5rem;
+    }
+
+    .contact-card:hover { background: #dbeafe; }
+
+    /* ── Footer ──────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      text-align: center;
+      padding: 1.5rem 1rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    /* ── Responsive ──────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .header-inner { padding: 0 1rem; }
+      .page-nav, main { padding-left: 1rem; padding-right: 1rem; }
+      .doc-title { font-size: 1.4rem; }
+      .lang-btn { padding: 4px 8px; }
+      .section { padding: 1.1rem 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════ HEADER ════════════════════════ -->
+<header>
+  <div class="header-inner">
+    <a class="brand" href="#">
+      <div class="brand-icon">C</div>
+      <span class="brand-name">Clipaste</span>
+    </a>
+    <div class="lang-switcher" role="group" aria-label="Language">
+      <button class="lang-btn active" onclick="setLang('zh')" id="btn-zh">中文</button>
+      <button class="lang-btn"        onclick="setLang('en')" id="btn-en">English</button>
+      <button class="lang-btn"        onclick="setLang('ja')" id="btn-ja">日本語</button>
+    </div>
+  </div>
+</header>
+
+<!-- ════════════════════════ PAGE NAV ══════════════════════ -->
+<nav class="page-nav" role="tablist">
+  <button class="page-tab active" id="tab-privacy" role="tab"
+          onclick="setPage('privacy')" aria-selected="true"
+          data-zh="隐私政策" data-en="Privacy Policy" data-ja="プライバシーポリシー">隐私政策</button>
+  <button class="page-tab" id="tab-terms" role="tab"
+          onclick="setPage('terms')" aria-selected="false"
+          data-zh="服务条款" data-en="Terms of Service" data-ja="利用規約">服务条款</button>
+</nav>
+
+<!-- ════════════════════════ MAIN ══════════════════════════ -->
+<main id="doc-content" role="tabpanel">
+  <!-- Rendered by JS -->
+</main>
+
+<!-- ════════════════════════ FOOTER ════════════════════════ -->
+<footer id="footer-text">
+  &copy; 2026 Clipaste. All rights reserved.
+</footer>
+
+<!-- ════════════════════════ TRANSLATIONS ══════════════════ -->
+<script>
+/* ─── Content database ───────────────────────────────────────── */
+const DOCS = {
+
+  /* ════════════ PRIVACY POLICY ════════════ */
+  privacy: {
+    zh: {
+      title: "Clipaste 隐私政策",
+      updated: "最后更新日期：2026年03月15日",
+      intro: `Clipaste 是一款专注于效率的剪贴板管理工具。我们深知剪贴板数据的高度敏感性，因此，Clipaste 的核心设计理念始终如一：<strong>您的数据，永远只属于您。</strong>`,
+      sections: [
+        {
+          title: "我们如何处理您的数据",
+          body: `<p><strong>绝对本地化与私有云端存储</strong></p>
+<p>Clipaste 承诺，绝不将您的任何剪贴板历史记录、文件、图片或文本上传至开发者服务器。</p>
+<ul>
+  <li><strong>本地加密存储：</strong>您的全部剪贴板数据均经过加密处理，安全存储于您设备的本地数据库中。</li>
+  <li><strong>iCloud 私有同步：</strong>若您开启多设备同步功能，数据将仅通过 Apple 官方 CloudKit 服务，以加密形式同步至您个人的 iCloud <em>私有数据库</em>。作为开发团队，我们既无权限、也无任何技术手段访问、查阅或解密您的数据。</li>
+</ul>`
+        },
+        {
+          title: "我们收集哪些信息",
+          body: `<p>我们<strong>不收集</strong>任何可识别您个人身份的信息（包括但不限于姓名、电子邮件地址、电话号码等），亦不集成任何第三方数据分析 SDK（如 Google Analytics 等）对您的使用行为进行追踪。</p>
+<p>Clipaste 仅在您的设备本地申请以下 macOS 系统权限，以维持核心功能正常运行：</p>
+<ul>
+  <li><strong>辅助功能 / 剪贴板读取权限：</strong>用于在后台静默记录您的复制历史。</li>
+  <li><strong>文件访问权限：</strong>当您复制或拖拽文件时，此权限用于读取并在应用内展示相应文件。所有文件操作均在您设备的本地安全沙盒中进行。</li>
+</ul>`
+        },
+        {
+          title: "数据共享与披露",
+          body: `<p>由于我们从未持有您的任何数据，因此不会、也不可能向任何第三方出售、交换或共享您的信息。</p>
+<div class="highlight-block">✦ 您的数据从未离开过您的设备或您的 iCloud 私有空间。</div>`
+        },
+        {
+          title: "政策更新",
+          body: `<p>若 Clipaste 核心功能发生变更，需要引入新的权限或数据处理机制，我们将在应用内及本页面以显著方式提前告知，并在未获得您明确同意之前不会执行任何变更。</p>`
+        },
+        {
+          title: "联系我们",
+          body: `<p>如对本隐私政策有任何疑问，或在使用过程中遇到任何问题，欢迎随时与我们联系：</p>
+<a class="contact-card" href="mailto:seedpilot@163.com">✉ seedpilot@163.com</a>`
+        }
+      ]
+    },
+
+    en: {
+      title: "Clipaste Privacy Policy",
+      updated: "Last Updated: March 15, 2026",
+      intro: `Clipaste is a productivity-focused clipboard management tool. We fully recognize the highly sensitive nature of clipboard data, which is why Clipaste is built on one unwavering principle: <strong>Your data belongs to you, and you alone.</strong>`,
+      sections: [
+        {
+          title: "How We Handle Your Data",
+          body: `<p><strong>Absolute Local and Private Cloud Storage</strong></p>
+<p>Clipaste guarantees that it will <strong>never</strong> upload any of your clipboard history, files, images, or text to our developer servers.</p>
+<ul>
+  <li><strong>Local Encrypted Storage:</strong> All your clipboard data is encrypted and securely stored in a local database on your device.</li>
+  <li><strong>iCloud Private Sync:</strong> If you enable multi-device sync, your data is synchronized exclusively through Apple's official CloudKit service — encrypted — to your personal iCloud <em>Private Database</em>. As the development team, we have neither the authority nor any technical capability to access, view, or decrypt your data.</li>
+</ul>`
+        },
+        {
+          title: "Information We Collect",
+          body: `<p>We <strong>do not collect</strong> any personally identifiable information (including but not limited to name, email address, phone number, etc.), nor do we integrate any third-party analytics SDKs (such as Google Analytics) to track your usage behavior.</p>
+<p>Clipaste only requests the following macOS system permissions locally on your device to maintain the proper operation of its core features:</p>
+<ul>
+  <li><strong>Accessibility / Clipboard Read Permission:</strong> Used to silently record your copy history in the background.</li>
+  <li><strong>File Access Permission:</strong> When you copy or drag files, this permission is used to read and display the relevant files within the application. All file operations are performed securely within your device's local sandbox.</li>
+</ul>`
+        },
+        {
+          title: "Data Sharing and Disclosure",
+          body: `<p>Since we never hold any of your data, we will not and cannot sell, exchange, or share your information with any third party.</p>
+<div class="highlight-block">✦ Your data never leaves your device or your personal iCloud private space.</div>`
+        },
+        {
+          title: "Policy Updates",
+          body: `<p>If Clipaste's core functionality changes, requiring the introduction of new permissions or data processing mechanisms, we will provide prominent advance notice within the application and on this page, and will not implement any changes without your explicit consent.</p>`
+        },
+        {
+          title: "Contact Us",
+          body: `<p>If you have any questions about this Privacy Policy or encounter any issues while using the application, please feel free to contact us:</p>
+<a class="contact-card" href="mailto:seedpilot@163.com">✉ seedpilot@163.com</a>`
+        }
+      ]
+    },
+
+    ja: {
+      title: "Clipaste プライバシーポリシー",
+      updated: "最終更新日：2026年3月15日",
+      intro: `Clipasteは生産性に特化したクリップボード管理ツールです。クリップボードデータの高い機密性を深く認識しているため、Clipasteは一貫した設計理念のもとに構築されています：<strong>あなたのデータは、永遠にあなただけのものです。</strong>`,
+      sections: [
+        {
+          title: "データの取り扱いについて",
+          body: `<p><strong>完全なローカルおよびプライベートクラウドストレージ</strong></p>
+<p>Clipasteは、お客様のクリップボード履歴、ファイル、画像、テキストを開発者サーバーに<strong>アップロードしない</strong>ことをお約束します。</p>
+<ul>
+  <li><strong>ローカル暗号化ストレージ：</strong>すべてのクリップボードデータは暗号化され、お使いのデバイスのローカルデータベースに安全に保存されます。</li>
+  <li><strong>iCloudプライベート同期：</strong>マルチデバイス同期を有効にした場合、データはApple公式のCloudKitサービスのみを通じて、暗号化された状態でお客様個人のiCloud<em>プライベートデータベース</em>に同期されます。開発チームとして、私たちはお客様のデータにアクセス、閲覧、または復号する権限も技術的手段も一切持っておりません。</li>
+</ul>`
+        },
+        {
+          title: "収集する情報について",
+          body: `<p>個人を特定できる情報（氏名、メールアドレス、電話番号などを含みますが、これらに限定されません）は<strong>収集しません</strong>。また、お客様の使用行動を追跡するためのサードパーティ製分析SDK（Google Analyticsなど）も統合しておりません。</p>
+<p>Clipasteは、コア機能の正常な動作を維持するために、お使いのデバイスでのみ以下のmacOSシステム権限を申請します：</p>
+<ul>
+  <li><strong>アクセシビリティ / クリップボード読み取り権限：</strong>バックグラウンドでコピー履歴を静かに記録するために使用します。</li>
+  <li><strong>ファイルアクセス権限：</strong>ファイルをコピーまたはドラッグする際、アプリ内で関連ファイルを読み取り表示するためにこの権限が必要です。すべてのファイル操作はお使いのデバイスのローカルセキュアサンドボックス内で行われます。</li>
+</ul>`
+        },
+        {
+          title: "データの共有と開示",
+          body: `<p>お客様のデータを一切保有していないため、お客様の情報をいかなる第三者にも販売、交換、または共有することはできませんし、いたしません。</p>
+<div class="highlight-block">✦ お客様のデータがデバイスまたはお客様個人のiCloudプライベート空間から出ることは一切ありません。</div>`
+        },
+        {
+          title: "ポリシーの更新",
+          body: `<p>Clipasteのコア機能が変更され、新しい権限やデータ処理メカニズムの導入が必要になった場合、アプリ内および本ページにて事前に目立つ形でお知らせします。お客様の明示的な同意なしに変更を実施することはありません。</p>`
+        },
+        {
+          title: "お問い合わせ",
+          body: `<p>本プライバシーポリシーについてご質問がある場合、またはご利用中に問題が発生した場合は、いつでも以下の方法でご連絡ください：</p>
+<a class="contact-card" href="mailto:seedpilot@163.com">✉ seedpilot@163.com</a>`
+        }
+      ]
+    }
+  },
+
+  /* ════════════ TERMS OF SERVICE ════════════ */
+  terms: {
+    zh: {
+      title: "Clipaste 服务条款",
+      updated: "最后更新日期：2026年03月15日",
+      intro: `感谢您选择 Clipaste。在使用本软件之前，请仔细阅读以下条款。<strong>使用本软件即视为您已充分理解并同意接受本协议的全部内容。</strong>`,
+      sections: [
+        {
+          title: "软件使用授权",
+          body: `<p>Clipaste 授予您一项个人的、不可转让的、非排他性的有限使用许可，允许您在您合法拥有或控制的 Apple 设备上下载、安装及使用本软件，且不得超出本协议所规定的范围。</p>`
+        },
+        {
+          title: "合法合规使用",
+          body: `<p>使用 Clipaste 时，您须遵守所有适用的法律法规。您不得利用本软件记录、存储或传播任何违法的、侵犯他人权利的或具有恶意性质的内容。</p>
+<p>因您使用本软件所产生的一切内容及后果，均由您个人承担全部法律责任。</p>`
+        },
+        {
+          title: "隐私保护",
+          body: `<p>我们高度重视用户隐私。关于我们处理数据的具体方式，请参阅我们的《隐私政策》。</p>
+<div class="highlight-block">✦ Clipaste 不接触、不收集、不分析您的任何剪贴板数据。</div>`
+        },
+        {
+          title: "免责声明",
+          body: `<ul>
+  <li><strong>数据安全：</strong>尽管我们采用了业界领先的本地加密存储及 iCloud 同步技术，但对于因硬件故障、操作系统问题或 iCloud 服务波动所导致的数据丢失，Clipaste 不承担任何直接或间接的赔偿责任。建议您定期备份重要数据。</li>
+  <li><strong>按现状提供：</strong>本软件以"按现状"方式提供，我们不作任何明示或暗示的保证，包括但不限于对适销性、特定用途适用性及不侵权性的保证。</li>
+</ul>`
+        },
+        {
+          title: "协议修改",
+          body: `<p>我们保留随时修改本协议的权利。修改后的协议将在本页面或软件内发布。若您在协议更新后继续使用本软件，即视为您已接受修改后的条款。</p>`
+        },
+        {
+          title: "联系我们",
+          body: `<p>如有任何法律事务或服务相关问题，请联系：</p>
+<a class="contact-card" href="mailto:seedpilot@163.com">✉ seedpilot@163.com</a>`
+        }
+      ]
+    },
+
+    en: {
+      title: "Clipaste Terms of Service",
+      updated: "Last Updated: March 15, 2026",
+      intro: `Thank you for choosing Clipaste. Please read the following terms carefully before using this software. <strong>By using this software, you acknowledge that you have read, understood, and agreed to be bound by all the terms of this Agreement.</strong>`,
+      sections: [
+        {
+          title: "Software License",
+          body: `<p>Clipaste grants you a personal, non-transferable, non-exclusive, limited license to download, install, and use this software on Apple devices that you lawfully own or control, solely within the scope defined by this Agreement.</p>`
+        },
+        {
+          title: "Lawful Use",
+          body: `<p>When using Clipaste, you must comply with all applicable laws and regulations. You may not use this software to record, store, or disseminate any illegal, infringing, or malicious content.</p>
+<p>You bear full legal responsibility for all content generated and consequences arising from your use of this software.</p>`
+        },
+        {
+          title: "Privacy Protection",
+          body: `<p>We place the highest importance on user privacy. For details on how we handle data, please refer to our Privacy Policy.</p>
+<div class="highlight-block">✦ Clipaste does not access, collect, or analyze any of your clipboard data.</div>`
+        },
+        {
+          title: "Disclaimer",
+          body: `<ul>
+  <li><strong>Data Security:</strong> Although we employ industry-leading local encrypted storage and iCloud synchronization technology, Clipaste shall not be liable for any direct or indirect damages resulting from data loss caused by hardware failure, operating system issues, or iCloud service disruptions. We recommend backing up important data regularly.</li>
+  <li><strong>Provided "As Is":</strong> This software is provided on an "as is" basis. We make no express or implied warranties, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement.</li>
+</ul>`
+        },
+        {
+          title: "Modification of Agreement",
+          body: `<p>We reserve the right to modify this Agreement at any time. The modified Agreement will be published on this page or within the software. Your continued use of the software following any update to the Agreement constitutes your acceptance of the modified terms.</p>`
+        },
+        {
+          title: "Contact Us",
+          body: `<p>For any legal matters or service-related inquiries, please contact:</p>
+<a class="contact-card" href="mailto:seedpilot@163.com">✉ seedpilot@163.com</a>`
+        }
+      ]
+    },
+
+    ja: {
+      title: "Clipaste 利用規約",
+      updated: "最終更新日：2026年3月15日",
+      intro: `Clipasteをお選びいただきありがとうございます。本ソフトウェアをご使用になる前に、以下の条項をよくお読みください。<strong>本ソフトウェアを使用することにより、本契約のすべての内容をお読みになり、ご理解され、拘束されることに同意したものとみなされます。</strong>`,
+      sections: [
+        {
+          title: "ソフトウェアライセンス",
+          body: `<p>Clipasteは、お客様が適法に所有または管理するAppleデバイスにおいて、本ソフトウェアのダウンロード、インストール、および本契約で定める範囲内での使用について、個人的、譲渡不可、非独占的な限定ライセンスをお客様に付与します。</p>`
+        },
+        {
+          title: "適法な利用",
+          body: `<p>Clipasteを使用する際は、すべての適用される法律および規制を遵守する必要があります。本ソフトウェアを使用して、違法な、他者の権利を侵害する、または悪意のあるコンテンツを記録、保存、または配布することはできません。</p>
+<p>本ソフトウェアの使用から生じるすべてのコンテンツおよびその結果については、お客様が全法的責任を負います。</p>`
+        },
+        {
+          title: "プライバシー保護",
+          body: `<p>私たちはユーザーのプライバシーを最重要視しています。データの取り扱い方法の詳細については、プライバシーポリシーをご参照ください。</p>
+<div class="highlight-block">✦ Clipasteはお客様のクリップボードデータにアクセスせず、収集せず、分析しません。</div>`
+        },
+        {
+          title: "免責事項",
+          body: `<ul>
+  <li><strong>データセキュリティ：</strong>業界最先端のローカル暗号化ストレージおよびiCloud同期技術を採用していますが、ハードウェアの障害、オペレーティングシステムの問題、またはiCloudサービスの中断によって生じるデータ損失について、Clipasteは直接的または間接的な損害賠償責任を一切負いません。重要なデータは定期的にバックアップすることをお勧めします。</li>
+  <li><strong>「現状有姿」での提供：</strong>本ソフトウェアは「現状有姿」で提供されます。商品性、特定目的への適合性、および非侵害性に関する保証を含むがこれに限定されない、明示的または黙示的な保証は一切行いません。</li>
+</ul>`
+        },
+        {
+          title: "契約の変更",
+          body: `<p>私たちはいつでも本契約を変更する権利を留保します。変更後の契約は本ページまたはソフトウェア内に公開されます。契約の更新後も本ソフトウェアを引き続き使用することは、変更後の条項に同意したものとみなされます。</p>`
+        },
+        {
+          title: "お問い合わせ",
+          body: `<p>法律上の事項またはサービスに関するお問い合わせは、以下の宛先にご連絡ください：</p>
+<a class="contact-card" href="mailto:seedpilot@163.com">✉ seedpilot@163.com</a>`
+        }
+      ]
+    }
+  }
+};
+
+/* ─── UI Labels (nav tabs, footer) ──────────────────────────── */
+const UI = {
+  zh: {
+    privacy: "隐私政策",
+    terms:   "服务条款",
+    footer:  "© 2026 Clipaste. 保留所有权利。"
+  },
+  en: {
+    privacy: "Privacy Policy",
+    terms:   "Terms of Service",
+    footer:  "© 2026 Clipaste. All rights reserved."
+  },
+  ja: {
+    privacy: "プライバシーポリシー",
+    terms:   "利用規約",
+    footer:  "© 2026 Clipaste. All rights reserved."
+  }
+};
+
+/* ─── State ──────────────────────────────────────────────────── */
+let currentLang = localStorage.getItem('clipaste-lang') || 'zh';
+let currentPage = new URLSearchParams(location.search).get('page') || 'privacy';
+
+/* ─── Render ─────────────────────────────────────────────────── */
+function render() {
+  const doc  = DOCS[currentPage][currentLang];
+  const ui   = UI[currentLang];
+
+  /* html lang attr */
+  document.documentElement.lang = currentLang;
+
+  /* document title */
+  document.title = doc.title + " – Clipaste";
+
+  /* language buttons */
+  ['zh','en','ja'].forEach(l => {
+    document.getElementById('btn-' + l)
+      .classList.toggle('active', l === currentLang);
+  });
+
+  /* page tabs */
+  ['privacy','terms'].forEach(p => {
+    const tab = document.getElementById('tab-' + p);
+    tab.textContent  = ui[p];
+    tab.classList.toggle('active', p === currentPage);
+    tab.setAttribute('aria-selected', p === currentPage ? 'true' : 'false');
+  });
+
+  /* footer */
+  document.getElementById('footer-text').textContent = ui.footer;
+
+  /* body */
+  const sections = doc.sections.map((s, i) => `
+    <div class="section">
+      <div class="section-title">
+        <span class="section-num">${i + 1}</span>
+        ${s.title}
+      </div>
+      <div class="section-body">${s.body}</div>
+    </div>`).join('');
+
+  document.getElementById('doc-content').innerHTML = `
+    <div class="doc-header">
+      <h1 class="doc-title">${doc.title}</h1>
+      <p class="doc-updated">${doc.updated}</p>
+      <div class="doc-intro">${doc.intro}</div>
+    </div>
+    ${sections}`;
+
+  /* scroll to top when switching pages */
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ─── Public setters ─────────────────────────────────────────── */
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('clipaste-lang', lang);
+  render();
+}
+
+function setPage(page) {
+  currentPage = page;
+  const url = new URL(location);
+  url.searchParams.set('page', page);
+  history.pushState({}, '', url);
+  render();
+}
+
+/* ─── Handle browser back/forward ───────────────────────────── */
+window.addEventListener('popstate', () => {
+  currentPage = new URLSearchParams(location.search).get('page') || 'privacy';
+  render();
+});
+
+/* ─── Boot ───────────────────────────────────────────────────── */
+render();
+</script>
+</body>
+</html>
