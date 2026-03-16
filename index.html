@@ -64,16 +64,18 @@
     .brand-icon {
       width: 32px;
       height: 32px;
-      background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
       border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      flex-shrink: 0;
+    }
+
+    .brand-icon img {
+      width: 32px;
+      height: 32px;
+      object-fit: cover;
     }
 
     .brand-name {
@@ -83,33 +85,21 @@
     }
 
     /* ── Language switcher ───────────────────────────────────── */
-    .lang-switcher {
-      display: flex;
-      gap: 4px;
-      background: var(--bg);
+    .lang-select {
+      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 3px;
-    }
-
-    .lang-btn {
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      padding: 4px 10px;
       border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--muted);
-      transition: background .15s, color .15s;
-      line-height: 1.4;
+      padding: 5px 8px;
+      font-size: 0.85rem;
+      color: var(--text);
+      cursor: pointer;
+      outline: none;
+      min-width: 140px;
     }
 
-    .lang-btn:hover { background: var(--border); color: var(--text); }
-
-    .lang-btn.active {
-      background: var(--accent);
-      color: #fff;
+    .lang-select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(59,130,246,.15);
     }
 
     /* ── Page nav ────────────────────────────────────────────── */
@@ -274,7 +264,7 @@
       .header-inner { padding: 0 1rem; }
       .page-nav, main { padding-left: 1rem; padding-right: 1rem; }
       .doc-title { font-size: 1.4rem; }
-      .lang-btn { padding: 4px 8px; }
+      .lang-select { min-width: 120px; font-size: 0.8rem; }
       .section { padding: 1.1rem 1.2rem; }
     }
   </style>
@@ -285,14 +275,18 @@
 <header>
   <div class="header-inner">
     <a class="brand" href="#">
-      <div class="brand-icon">C</div>
+      <div class="brand-icon"><img src="https://github.com/user-attachments/assets/47982de2-3039-406e-947b-f9e335977f14" alt="Clipaste" width="32" height="32" /></div>
       <span class="brand-name">Clipaste</span>
     </a>
-    <div class="lang-switcher" role="group" aria-label="Language">
-      <button class="lang-btn active" onclick="setLang('zh')" id="btn-zh">中文</button>
-      <button class="lang-btn"        onclick="setLang('en')" id="btn-en">English</button>
-      <button class="lang-btn"        onclick="setLang('ja')" id="btn-ja">日本語</button>
-    </div>
+    <select class="lang-select" id="lang-select" onchange="setLang(this.value)" aria-label="Language">
+      <option value="zh">🇨🇳 简体中文</option>
+      <option value="zh-TW">🇨🇳 繁體中文</option>
+      <option value="en">🇺🇸 English</option>
+      <option value="ja">🇯🇵 日本語</option>
+      <option value="ru">🇷🇺 Русский</option>
+      <option value="fr">🇫🇷 Français</option>
+      <option value="de">🇩🇪 Deutsch</option>
+    </select>
   </div>
 </header>
 
@@ -441,6 +435,166 @@ const DOCS = {
 <a class="contact-card" href="mailto:seedpilot@163.com">✉ seedpilot@163.com</a>`
         }
       ]
+    },
+
+    "zh-TW": {
+      title: "Clipaste 隱私權政策",
+      updated: "最後更新日期：2026年03月15日",
+      intro: `Clipaste 是一款專注於效率的剪貼簿管理工具。我們深知剪貼簿資料的高度敏感性，因此，Clipaste 的核心設計理念始終如一：<strong>您的資料，永遠只屬於您。</strong>`,
+      sections: [
+        {
+          title: "我們如何處理您的資料",
+          body: `<p><strong>絕對本地化與私有雲端儲存</strong></p>
+<p>Clipaste 承諾，絕不將您的任何剪貼簿歷史記錄、檔案、圖片或文字上傳至開發者伺服器。</p>
+<ul>
+  <li><strong>本地加密儲存：</strong>您的全部剪貼簿資料均經過加密處理，安全儲存於您裝置的本地資料庫中。</li>
+  <li><strong>iCloud 私有同步：</strong>若您開啟多裝置同步功能，資料將僅透過 Apple 官方 CloudKit 服務，以加密形式同步至您個人的 iCloud <em>私有資料庫</em>。作為開發團隊，我們既無權限、也無任何技術手段存取、查閱或解密您的資料。</li>
+</ul>`
+        },
+        {
+          title: "我們收集哪些資訊",
+          body: `<p>我們<strong>不收集</strong>任何可識別您個人身份的資訊（包括但不限於姓名、電子郵件地址、電話號碼等），亦不整合任何第三方資料分析 SDK（如 Google Analytics 等）對您的使用行為進行追蹤。</p>
+<p>Clipaste 僅在您的裝置本地申請以下 macOS 系統權限，以維持核心功能正常運作：</p>
+<ul>
+  <li><strong>輔助功能 / 剪貼簿讀取權限：</strong>用於在背景靜默記錄您的複製歷史。</li>
+  <li><strong>檔案存取權限：</strong>當您複製或拖曳檔案時，此權限用於讀取並在應用程式內展示相應檔案。所有檔案操作均在您裝置的本地安全沙盒中進行。</li>
+</ul>`
+        },
+        {
+          title: "資料共享與揭露",
+          body: `<p>由於我們從未持有您的任何資料，因此不會、也不可能向任何第三方出售、交換或共享您的資訊。</p>
+<div class="highlight-block">✦ 您的資料從未離開過您的裝置或您的 iCloud 私有空間。</div>`
+        },
+        {
+          title: "政策更新",
+          body: `<p>若 Clipaste 核心功能發生變更，需要引入新的權限或資料處理機制，我們將在應用程式內及本頁面以顯著方式提前告知，並在未獲得您明確同意之前不會執行任何變更。</p>`
+        },
+        {
+          title: "聯絡我們",
+          body: `<p>如對本隱私權政策有任何疑問，或在使用過程中遇到任何問題，歡迎隨時與我們聯絡：</p>
+<a class="contact-card" href="mailto:seedpilot@163.com">✉ seedpilot@163.com</a>`
+        }
+      ]
+    },
+
+    ru: {
+      title: "Политика конфиденциальности Clipaste",
+      updated: "Последнее обновление: 15 марта 2026 г.",
+      intro: `Clipaste — инструмент управления буфером обмена, ориентированный на повышение производительности. Мы в полной мере осознаём высокую конфиденциальность данных буфера обмена, поэтому Clipaste построен на одном неизменном принципе: <strong>Ваши данные принадлежат исключительно вам.</strong>`,
+      sections: [
+        {
+          title: "Обработка ваших данных",
+          body: `<p><strong>Абсолютное локальное и частное облачное хранилище</strong></p>
+<p>Clipaste гарантирует, что <strong>никогда</strong> не будет передавать историю буфера обмена, файлы, изображения или текст на серверы разработчика.</p>
+<ul>
+  <li><strong>Локальное зашифрованное хранилище:</strong> Все данные буфера обмена зашифрованы и надёжно хранятся в локальной базе данных на вашем устройстве.</li>
+  <li><strong>Частная синхронизация iCloud:</strong> Если вы включите синхронизацию между устройствами, данные будут синхронизироваться исключительно через официальный сервис Apple CloudKit — в зашифрованном виде — в вашу личную <em>частную базу данных</em> iCloud. Команда разработчиков не имеет ни полномочий, ни технической возможности получить доступ к вашим данным, просматривать или расшифровывать их.</li>
+</ul>`
+        },
+        {
+          title: "Собираемые данные",
+          body: `<p>Мы <strong>не собираем</strong> никаких персональных данных (включая, но не ограничиваясь именем, адресом электронной почты, номером телефона и т. д.) и не используем сторонние аналитические SDK (например, Google Analytics) для отслеживания вашего поведения.</p>
+<p>Clipaste запрашивает только следующие системные разрешения macOS на вашем устройстве для обеспечения работы основных функций:</p>
+<ul>
+  <li><strong>Специальные возможности / разрешение на чтение буфера обмена:</strong> Используется для автоматической фоновой записи истории копирования.</li>
+  <li><strong>Разрешение на доступ к файлам:</strong> При копировании или перетаскивании файлов это разрешение используется для их чтения и отображения в приложении. Все файловые операции выполняются в защищённой локальной среде вашего устройства.</li>
+</ul>`
+        },
+        {
+          title: "Передача данных третьим лицам",
+          body: `<p>Поскольку мы никогда не храним ваши данные, мы не можем и не будем продавать, обменивать или передавать вашу информацию третьим лицам.</p>
+<div class="highlight-block">✦ Ваши данные никогда не покидают ваше устройство или ваше личное частное пространство iCloud.</div>`
+        },
+        {
+          title: "Обновление политики",
+          body: `<p>В случае изменения основных функций Clipaste, требующего введения новых разрешений или механизмов обработки данных, мы заблаговременно уведомим вас в приложении и на данной странице. Изменения не будут применяться без вашего явного согласия.</p>`
+        },
+        {
+          title: "Связь с нами",
+          body: `<p>Если у вас есть вопросы по данной Политике конфиденциальности или вы столкнулись с трудностями при использовании приложения, пожалуйста, свяжитесь с нами:</p>
+<a class="contact-card" href="mailto:seedpilot@163.com">✉ seedpilot@163.com</a>`
+        }
+      ]
+    },
+
+    fr: {
+      title: "Politique de confidentialité de Clipaste",
+      updated: "Dernière mise à jour : 15 mars 2026",
+      intro: `Clipaste est un gestionnaire de presse-papiers axé sur la productivité. Nous reconnaissons pleinement la nature hautement sensible des données du presse-papiers, c'est pourquoi Clipaste repose sur un principe fondamental : <strong>Vos données vous appartiennent, et à vous seul.</strong>`,
+      sections: [
+        {
+          title: "Traitement de vos données",
+          body: `<p><strong>Stockage local absolu et cloud privé</strong></p>
+<p>Clipaste s'engage à ne <strong>jamais</strong> télécharger votre historique de presse-papiers, vos fichiers, images ou textes vers nos serveurs de développement.</p>
+<ul>
+  <li><strong>Stockage local chiffré :</strong> Toutes vos données du presse-papiers sont chiffrées et stockées de manière sécurisée dans une base de données locale sur votre appareil.</li>
+  <li><strong>Synchronisation privée iCloud :</strong> Si vous activez la synchronisation multi-appareils, vos données seront synchronisées exclusivement via le service officiel CloudKit d'Apple — de manière chiffrée — vers votre <em>base de données privée</em> iCloud personnelle. En tant qu'équipe de développement, nous n'avons ni l'autorisation ni la capacité technique d'accéder à vos données, de les consulter ou de les déchiffrer.</li>
+</ul>`
+        },
+        {
+          title: "Informations collectées",
+          body: `<p>Nous <strong>ne collectons pas</strong> d'informations personnellement identifiables (notamment le nom, l'adresse e-mail, le numéro de téléphone, etc.) et n'intégrons aucun SDK d'analyse tiers (tel que Google Analytics) pour suivre votre comportement d'utilisation.</p>
+<p>Clipaste ne demande que les autorisations système macOS suivantes sur votre appareil pour assurer le bon fonctionnement de ses fonctionnalités principales :</p>
+<ul>
+  <li><strong>Accessibilité / autorisation de lecture du presse-papiers :</strong> Utilisée pour enregistrer silencieusement votre historique de copies en arrière-plan.</li>
+  <li><strong>Autorisation d'accès aux fichiers :</strong> Lorsque vous copiez ou faites glisser des fichiers, cette autorisation est utilisée pour les lire et les afficher dans l'application. Toutes les opérations sur les fichiers sont effectuées dans le bac à sable local sécurisé de votre appareil.</li>
+</ul>`
+        },
+        {
+          title: "Partage et divulgation des données",
+          body: `<p>Étant donné que nous ne détenons jamais aucune de vos données, nous ne pouvons pas et ne vendrons pas, n'échangerons pas et ne partagerons pas vos informations avec des tiers.</p>
+<div class="highlight-block">✦ Vos données ne quittent jamais votre appareil ou votre espace privé iCloud personnel.</div>`
+        },
+        {
+          title: "Mises à jour de la politique",
+          body: `<p>Si les fonctionnalités principales de Clipaste évoluent, nécessitant l'introduction de nouvelles autorisations ou mécanismes de traitement des données, nous vous en informerons de manière visible à l'avance dans l'application et sur cette page. Aucune modification ne sera appliquée sans votre consentement explicite.</p>`
+        },
+        {
+          title: "Nous contacter",
+          body: `<p>Si vous avez des questions concernant cette Politique de confidentialité ou si vous rencontrez des difficultés lors de l'utilisation de l'application, n'hésitez pas à nous contacter :</p>
+<a class="contact-card" href="mailto:seedpilot@163.com">✉ seedpilot@163.com</a>`
+        }
+      ]
+    },
+
+    de: {
+      title: "Datenschutzrichtlinie von Clipaste",
+      updated: "Zuletzt aktualisiert: 15. März 2026",
+      intro: `Clipaste ist ein produktivitätsorientiertes Werkzeug zur Verwaltung der Zwischenablage. Wir sind uns der äußerst sensiblen Natur von Zwischenablagedaten vollständig bewusst, weshalb Clipaste auf einem unveränderlichen Grundsatz beruht: <strong>Ihre Daten gehören Ihnen und ausschließlich Ihnen.</strong>`,
+      sections: [
+        {
+          title: "Umgang mit Ihren Daten",
+          body: `<p><strong>Ausschließlich lokale und private Cloud-Speicherung</strong></p>
+<p>Clipaste garantiert, dass Ihre Zwischenablagedaten, Dateien, Bilder oder Texte <strong>niemals</strong> auf unsere Entwicklerserver hochgeladen werden.</p>
+<ul>
+  <li><strong>Lokale verschlüsselte Speicherung:</strong> Alle Ihre Zwischenablagedaten werden verschlüsselt und sicher in einer lokalen Datenbank auf Ihrem Gerät gespeichert.</li>
+  <li><strong>Privater iCloud-Abgleich:</strong> Wenn Sie die Synchronisierung zwischen Geräten aktivieren, werden Ihre Daten ausschließlich über den offiziellen CloudKit-Dienst von Apple – verschlüsselt – in Ihre persönliche <em>private Datenbank</em> bei iCloud synchronisiert. Als Entwicklungsteam haben wir weder die Berechtigung noch die technische Möglichkeit, auf Ihre Daten zuzugreifen, sie einzusehen oder zu entschlüsseln.</li>
+</ul>`
+        },
+        {
+          title: "Erfasste Informationen",
+          body: `<p>Wir <strong>erfassen keine</strong> personenbezogenen Daten (einschließlich, aber nicht beschränkt auf Name, E-Mail-Adresse, Telefonnummer usw.) und integrieren keine Analyse-SDKs von Drittanbietern (wie Google Analytics), um Ihr Nutzungsverhalten zu verfolgen.</p>
+<p>Clipaste fordert nur die folgenden macOS-Systemberechtigungen auf Ihrem Gerät an, um den ordnungsgemäßen Betrieb der Kernfunktionen sicherzustellen:</p>
+<ul>
+  <li><strong>Bedienungshilfen / Berechtigung zum Lesen der Zwischenablage:</strong> Wird verwendet, um Ihren Kopierverlauf im Hintergrund automatisch zu erfassen.</li>
+  <li><strong>Dateizugriffsberechtigung:</strong> Wenn Sie Dateien kopieren oder verschieben, wird diese Berechtigung verwendet, um die entsprechenden Dateien zu lesen und in der Anwendung anzuzeigen. Alle Dateioperationen werden in der sicheren lokalen Sandbox Ihres Geräts durchgeführt.</li>
+</ul>`
+        },
+        {
+          title: "Datenweitergabe und Offenlegung",
+          body: `<p>Da wir zu keinem Zeitpunkt Ihre Daten speichern, können und werden wir Ihre Informationen nicht an Dritte verkaufen, tauschen oder weitergeben.</p>
+<div class="highlight-block">✦ Ihre Daten verlassen zu keinem Zeitpunkt Ihr Gerät oder Ihren persönlichen privaten iCloud-Bereich.</div>`
+        },
+        {
+          title: "Richtlinienaktualisierungen",
+          body: `<p>Sollten sich die Kernfunktionen von Clipaste ändern und neue Berechtigungen oder Datenverarbeitungsmechanismen erforderlich werden, werden wir Sie vorab deutlich sichtbar in der Anwendung und auf dieser Seite darüber informieren. Änderungen werden nicht ohne Ihre ausdrückliche Zustimmung umgesetzt.</p>`
+        },
+        {
+          title: "Kontakt",
+          body: `<p>Wenn Sie Fragen zu dieser Datenschutzrichtlinie haben oder während der Nutzung der Anwendung auf Probleme stoßen, wenden Sie sich bitte jederzeit an uns:</p>
+<a class="contact-card" href="mailto:seedpilot@163.com">✉ seedpilot@163.com</a>`
+        }
+      ]
     }
   },
 
@@ -558,6 +712,158 @@ const DOCS = {
 <a class="contact-card" href="mailto:seedpilot@163.com">✉ seedpilot@163.com</a>`
         }
       ]
+    },
+
+    "zh-TW": {
+      title: "Clipaste 服務條款",
+      updated: "最後更新日期：2026年03月15日",
+      intro: `感謝您選擇 Clipaste。在使用本軟體之前，請仔細閱讀以下條款。<strong>使用本軟體即視為您已充分理解並同意接受本協議的全部內容。</strong>`,
+      sections: [
+        {
+          title: "軟體使用授權",
+          body: `<p>Clipaste 授予您一項個人的、不可轉讓的、非排他性的有限使用授權，允許您在您合法擁有或控制的 Apple 裝置上下載、安裝及使用本軟體，且不得超出本協議所規定的範圍。</p>`
+        },
+        {
+          title: "合法合規使用",
+          body: `<p>使用 Clipaste 時，您須遵守所有適用的法律法規。您不得利用本軟體記錄、儲存或傳播任何違法的、侵犯他人權利的或具有惡意性質的內容。</p>
+<p>因您使用本軟體所產生的一切內容及後果，均由您個人承擔全部法律責任。</p>`
+        },
+        {
+          title: "隱私保護",
+          body: `<p>我們高度重視使用者隱私。關於我們處理資料的具體方式，請參閱我們的《隱私權政策》。</p>
+<div class="highlight-block">✦ Clipaste 不接觸、不收集、不分析您的任何剪貼簿資料。</div>`
+        },
+        {
+          title: "免責聲明",
+          body: `<ul>
+  <li><strong>資料安全：</strong>儘管我們採用了業界領先的本地加密儲存及 iCloud 同步技術，但對於因硬體故障、作業系統問題或 iCloud 服務波動所導致的資料遺失，Clipaste 不承擔任何直接或間接的賠償責任。建議您定期備份重要資料。</li>
+  <li><strong>按現狀提供：</strong>本軟體以「按現狀」方式提供，我們不作任何明示或暗示的保證，包括但不限於對適售性、特定用途適用性及不侵權性的保證。</li>
+</ul>`
+        },
+        {
+          title: "協議修改",
+          body: `<p>我們保留隨時修改本協議的權利。修改後的協議將在本頁面或軟體內發布。若您在協議更新後繼續使用本軟體，即視為您已接受修改後的條款。</p>`
+        },
+        {
+          title: "聯絡我們",
+          body: `<p>如有任何法律事務或服務相關問題，請聯絡：</p>
+<a class="contact-card" href="mailto:seedpilot@163.com">✉ seedpilot@163.com</a>`
+        }
+      ]
+    },
+
+    ru: {
+      title: "Условия использования Clipaste",
+      updated: "Последнее обновление: 15 марта 2026 г.",
+      intro: `Благодарим вас за выбор Clipaste. Перед использованием данного программного обеспечения внимательно ознакомьтесь с приведёнными ниже условиями. <strong>Используя данное программное обеспечение, вы подтверждаете, что прочитали, поняли и согласились соблюдать все условия настоящего Соглашения.</strong>`,
+      sections: [
+        {
+          title: "Лицензия на использование программного обеспечения",
+          body: `<p>Clipaste предоставляет вам персональную, непередаваемую, неисключительную ограниченную лицензию на загрузку, установку и использование данного программного обеспечения на устройствах Apple, которые вы законно приобрели или контролируете, исключительно в рамках, определённых настоящим Соглашением.</p>`
+        },
+        {
+          title: "Законное использование",
+          body: `<p>При использовании Clipaste вы обязаны соблюдать все применимые законы и нормативные акты. Запрещается использовать данное программное обеспечение для записи, хранения или распространения незаконного, нарушающего права третьих лиц или вредоносного контента.</p>
+<p>Вы несёте полную юридическую ответственность за всё содержимое, создаваемое при использовании данного программного обеспечения, и за последствия его использования.</p>`
+        },
+        {
+          title: "Защита конфиденциальности",
+          body: `<p>Мы уделяем первостепенное значение конфиденциальности пользователей. Подробную информацию о порядке обработки данных см. в нашей Политике конфиденциальности.</p>
+<div class="highlight-block">✦ Clipaste не получает доступа к данным вашего буфера обмена, не собирает и не анализирует их.</div>`
+        },
+        {
+          title: "Отказ от ответственности",
+          body: `<ul>
+  <li><strong>Безопасность данных:</strong> Несмотря на применение передовых технологий локального зашифрованного хранилища и синхронизации iCloud, Clipaste не несёт прямой или косвенной ответственности за потерю данных вследствие неисправности оборудования, проблем с операционной системой или сбоев в работе сервиса iCloud. Рекомендуем регулярно создавать резервные копии важных данных.</li>
+  <li><strong>Предоставляется «как есть»:</strong> Данное программное обеспечение предоставляется на условиях «как есть». Мы не даём никаких явных или подразумеваемых гарантий, включая, но не ограничиваясь, гарантиями товарного состояния, пригодности для определённых целей и отсутствия нарушений.</li>
+</ul>`
+        },
+        {
+          title: "Изменение Соглашения",
+          body: `<p>Мы оставляем за собой право в любое время вносить изменения в настоящее Соглашение. Обновлённое Соглашение будет опубликовано на данной странице или в приложении. Продолжение использования программного обеспечения после обновления Соглашения означает ваше согласие с изменёнными условиями.</p>`
+        },
+        {
+          title: "Связь с нами",
+          body: `<p>По вопросам правового характера или в связи с обслуживанием обращайтесь по адресу:</p>
+<a class="contact-card" href="mailto:seedpilot@163.com">✉ seedpilot@163.com</a>`
+        }
+      ]
+    },
+
+    fr: {
+      title: "Conditions d'utilisation de Clipaste",
+      updated: "Dernière mise à jour : 15 mars 2026",
+      intro: `Merci d'avoir choisi Clipaste. Veuillez lire attentivement les conditions suivantes avant d'utiliser ce logiciel. <strong>En utilisant ce logiciel, vous reconnaissez avoir lu, compris et accepté d'être lié par l'ensemble des conditions du présent Accord.</strong>`,
+      sections: [
+        {
+          title: "Licence d'utilisation du logiciel",
+          body: `<p>Clipaste vous accorde une licence limitée, personnelle, non transférable et non exclusive pour télécharger, installer et utiliser ce logiciel sur des appareils Apple que vous possédez ou contrôlez légalement, uniquement dans le cadre défini par le présent Accord.</p>`
+        },
+        {
+          title: "Utilisation légale",
+          body: `<p>En utilisant Clipaste, vous devez respecter toutes les lois et réglementations applicables. Vous ne pouvez pas utiliser ce logiciel pour enregistrer, stocker ou diffuser tout contenu illégal, portant atteinte aux droits d'autrui ou malveillant.</p>
+<p>Vous assumez l'entière responsabilité juridique de tout contenu généré et des conséquences découlant de votre utilisation de ce logiciel.</p>`
+        },
+        {
+          title: "Protection de la vie privée",
+          body: `<p>Nous accordons la plus haute importance à la confidentialité des utilisateurs. Pour plus de détails sur la manière dont nous traitons les données, veuillez consulter notre Politique de confidentialité.</p>
+<div class="highlight-block">✦ Clipaste n'accède pas, ne collecte pas et n'analyse pas vos données de presse-papiers.</div>`
+        },
+        {
+          title: "Clause de non-responsabilité",
+          body: `<ul>
+  <li><strong>Sécurité des données :</strong> Bien que nous utilisions des technologies de stockage local chiffré et de synchronisation iCloud de pointe, Clipaste ne sera pas responsable des dommages directs ou indirects résultant de la perte de données due à une défaillance matérielle, à des problèmes de système d'exploitation ou à des interruptions du service iCloud. Nous vous recommandons de sauvegarder régulièrement vos données importantes.</li>
+  <li><strong>Fourni « en l'état » :</strong> Ce logiciel est fourni « en l'état ». Nous ne donnons aucune garantie expresse ou implicite, notamment en ce qui concerne la qualité marchande, l'adéquation à un usage particulier ou l'absence de contrefaçon.</li>
+</ul>`
+        },
+        {
+          title: "Modification de l'Accord",
+          body: `<p>Nous nous réservons le droit de modifier le présent Accord à tout moment. L'Accord modifié sera publié sur cette page ou dans le logiciel. La poursuite de l'utilisation du logiciel après toute mise à jour de l'Accord vaut acceptation des conditions modifiées.</p>`
+        },
+        {
+          title: "Nous contacter",
+          body: `<p>Pour toute question juridique ou relative au service, veuillez contacter :</p>
+<a class="contact-card" href="mailto:seedpilot@163.com">✉ seedpilot@163.com</a>`
+        }
+      ]
+    },
+
+    de: {
+      title: "Nutzungsbedingungen von Clipaste",
+      updated: "Zuletzt aktualisiert: 15. März 2026",
+      intro: `Vielen Dank, dass Sie sich für Clipaste entschieden haben. Bitte lesen Sie die folgenden Bedingungen sorgfältig durch, bevor Sie diese Software nutzen. <strong>Durch die Nutzung dieser Software bestätigen Sie, dass Sie alle Bedingungen dieser Vereinbarung gelesen, verstanden haben und damit einverstanden sind, daran gebunden zu sein.</strong>`,
+      sections: [
+        {
+          title: "Softwarelizenz",
+          body: `<p>Clipaste gewährt Ihnen eine persönliche, nicht übertragbare, nicht ausschließliche, beschränkte Lizenz zum Herunterladen, Installieren und Verwenden dieser Software auf Apple-Geräten, die Sie rechtmäßig besitzen oder kontrollieren, ausschließlich im durch diese Vereinbarung festgelegten Rahmen.</p>`
+        },
+        {
+          title: "Rechtmäßige Nutzung",
+          body: `<p>Bei der Nutzung von Clipaste müssen Sie alle geltenden Gesetze und Vorschriften einhalten. Sie dürfen diese Software nicht verwenden, um illegale, rechtsverletzende oder schädliche Inhalte aufzuzeichnen, zu speichern oder zu verbreiten.</p>
+<p>Sie tragen die volle rechtliche Verantwortung für alle durch die Nutzung dieser Software erzeugten Inhalte und die daraus entstehenden Folgen.</p>`
+        },
+        {
+          title: "Datenschutz",
+          body: `<p>Wir legen höchsten Wert auf den Schutz der Privatsphäre unserer Nutzer. Einzelheiten zur Datenverarbeitung entnehmen Sie bitte unserer Datenschutzrichtlinie.</p>
+<div class="highlight-block">✦ Clipaste greift nicht auf Ihre Zwischenablagedaten zu, erfasst diese nicht und analysiert sie nicht.</div>`
+        },
+        {
+          title: "Haftungsausschluss",
+          body: `<ul>
+  <li><strong>Datensicherheit:</strong> Obwohl wir branchenführende Technologien zur lokalen verschlüsselten Speicherung und iCloud-Synchronisierung einsetzen, haftet Clipaste nicht für direkte oder indirekte Schäden durch Datenverlust infolge von Hardwareausfällen, Betriebssystemproblemen oder Unterbrechungen des iCloud-Dienstes. Wir empfehlen, wichtige Daten regelmäßig zu sichern.</li>
+  <li><strong>Bereitstellung „wie besehen":</strong> Diese Software wird „wie besehen" bereitgestellt. Wir übernehmen keine ausdrücklichen oder stillschweigenden Garantien, einschließlich, aber nicht beschränkt auf Garantien der Marktgängigkeit, der Eignung für einen bestimmten Zweck oder der Nichtverletzung von Rechten Dritter.</li>
+</ul>`
+        },
+        {
+          title: "Änderung der Vereinbarung",
+          body: `<p>Wir behalten uns das Recht vor, diese Vereinbarung jederzeit zu ändern. Die geänderte Vereinbarung wird auf dieser Seite oder in der Software veröffentlicht. Die weitere Nutzung der Software nach einer Aktualisierung der Vereinbarung gilt als Ihre Zustimmung zu den geänderten Bedingungen.</p>`
+        },
+        {
+          title: "Kontakt",
+          body: `<p>Bei rechtlichen Angelegenheiten oder dienstleistungsbezogenen Fragen wenden Sie sich bitte an:</p>
+<a class="contact-card" href="mailto:seedpilot@163.com">✉ seedpilot@163.com</a>`
+        }
+      ]
     }
   }
 };
@@ -578,6 +884,26 @@ const UI = {
     privacy: "プライバシーポリシー",
     terms:   "利用規約",
     footer:  "© 2026 Clipaste. All rights reserved."
+  },
+  "zh-TW": {
+    privacy: "隱私權政策",
+    terms:   "服務條款",
+    footer:  "© 2026 Clipaste. 保留所有權利。"
+  },
+  ru: {
+    privacy: "Политика конфиденциальности",
+    terms:   "Условия использования",
+    footer:  "© 2026 Clipaste. Все права защищены."
+  },
+  fr: {
+    privacy: "Politique de confidentialité",
+    terms:   "Conditions d'utilisation",
+    footer:  "© 2026 Clipaste. Tous droits réservés."
+  },
+  de: {
+    privacy: "Datenschutzrichtlinie",
+    terms:   "Nutzungsbedingungen",
+    footer:  "© 2026 Clipaste. Alle Rechte vorbehalten."
   }
 };
 
@@ -591,16 +917,14 @@ function render() {
   const ui   = UI[currentLang];
 
   /* html lang attr */
-  document.documentElement.lang = currentLang;
+  const langAttrMap = { 'zh': 'zh-CN', 'zh-TW': 'zh-TW', 'en': 'en', 'ja': 'ja', 'ru': 'ru', 'fr': 'fr', 'de': 'de' };
+  document.documentElement.lang = langAttrMap[currentLang] || currentLang;
 
   /* document title */
   document.title = doc.title + " – Clipaste";
 
-  /* language buttons */
-  ['zh','en','ja'].forEach(l => {
-    document.getElementById('btn-' + l)
-      .classList.toggle('active', l === currentLang);
-  });
+  /* language select */
+  document.getElementById('lang-select').value = currentLang;
 
   /* page tabs */
   ['privacy','terms'].forEach(p => {
